@@ -22,7 +22,8 @@ builder.Services.AddSwaggerGen(c =>
         Description = "ARC-0014 Algorand authentication transaction",
         In = ParameterLocation.Header,
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.ApiKey,
+        
     });
 
     c.OperationFilter<Swashbuckle.AspNetCore.Filters.SecurityRequirementsOperationFilter>();
@@ -40,6 +41,7 @@ builder.Services
      o.Realm = builder.Configuration["algod:realm"];
      o.NetworkGenesisHash = builder.Configuration["algod:networkGenesisHash"];
      o.Debug = true;
+     o.EmptySuccessOnFailure = true;
  });
 
 
