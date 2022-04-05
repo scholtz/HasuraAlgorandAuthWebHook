@@ -21,6 +21,7 @@ namespace HasuraAlgorandAuthWebHook.Controllers
             if (string.IsNullOrEmpty(User?.Identity?.Name))
             {
                 var ret = new Model.WebhookResponse() { UserId = "", Role = "public" };
+                ret.Expires = DateTimeOffset.Now.AddDays(1);
                 return Ok(ret);
             }
             else
