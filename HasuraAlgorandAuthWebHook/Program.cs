@@ -39,7 +39,6 @@ builder.Services
      o.AlgodServerToken = builder.Configuration["algod:token"];
      o.Realm = builder.Configuration["algod:realm"];
      o.NetworkGenesisHash = builder.Configuration["algod:networkGenesisHash"];
-     o.Debug = true;
  });
 
 
