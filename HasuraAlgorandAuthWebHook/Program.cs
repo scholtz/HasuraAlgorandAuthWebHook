@@ -1,4 +1,5 @@
 using AlgorandAuthentication;
+using HasuraAlgorandAuthWebHook.Repository;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +44,7 @@ builder.Services
      o.Debug = true;
      o.EmptySuccessOnFailure = true;
  });
-
+builder.Services.AddSingleton<RoleRepository>();
 
 var corsConfig = builder.Configuration.GetSection("Cors").AsEnumerable().Select(k => k.Value).Where(k => !string.IsNullOrEmpty(k)).ToArray();
 if (corsConfig.Length > 0)
@@ -64,6 +65,9 @@ if (corsConfig.Length > 0)
 
 
 var app = builder.Build();
+
+var roleRepo = app.Services.GetService<RoleRepository>();
+Console.WriteLine(roleRepo?.Stats());
 
 app.UseSwagger();
 app.UseSwaggerUI();

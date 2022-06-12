@@ -1,3 +1,4 @@
+using HasuraAlgorandAuthWebHook.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,11 @@ namespace HasuraAlgorandAuthWebHook.Controllers
     public class AuthController : ControllerBase
     {
         private ILogger<AuthController> logger;
-        public AuthController(ILogger<AuthController> logger)
+        private readonly RoleRepository roleRepository;
+        public AuthController(ILogger<AuthController> logger, RoleRepository roleRepository)
         {
             this.logger = logger;
+            this.roleRepository = roleRepository;
         }
 
         [Authorize]
@@ -26,7 +29,7 @@ namespace HasuraAlgorandAuthWebHook.Controllers
             }
             else
             {
-                var ret = new Model.WebhookResponse() { UserId = User.Identity.Name };
+                var ret = new Model.WebhookResponse() { UserId = User.Identity.Name, Role = roleRepository.GetRole(User.Identity.Name) };
                 var exp = User.Claims.FirstOrDefault(c => c.Type == "exp");
                 if (!string.IsNullOrEmpty(exp?.Value)) if (long.TryParse(exp.Value, out var time)) ret.Expires = DateTimeOffset.FromUnixTimeSeconds(time);
                 return Ok(ret);
